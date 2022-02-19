@@ -1,0 +1,50 @@
+{{each greetingTasks greetingTask index}}
+<div class="card {{greetingTask.card_type}}">
+    <div>
+        <label class="ios-toggle-label" title="问候开关">
+            <input onchange="toggleGreeting(this)" class="ios-toggle-checkbox" type="checkbox"
+                   data-id="{{greetingTask.id}}"   name="open" {{greetingTask.open ? 'checked' : ''}} />
+            <span class="ios-toggle-button"></span>
+        </label>
+    </div>
+    <form id="greetingTask{{index}}">
+        <input type="hidden" name="id" value="{{greetingTask.id}}">
+        <input type="hidden" name="card_type" value="{{greetingTask.card_type}}">
+        <h2 class="text-xl font-bold mb-2 text-center">{{greetingTask.card_name}}</h2>
+        <p class="text-sm text-gray text-center">请勾选要推送的服务</p>
+        <div class="service-list flex flex-row ml-6 mr-3 my-6 ">
+            <div class="flex-1 space-y-3">
+                {{each serviceList service idx}}
+                {{if idx < 5}}
+                <div>
+                    <label>
+                        <input {{greetingTask.subscribe.includes(service.id) ? 'checked' : ''}} type="checkbox" name="service" value="{{service.id}}"/>&nbsp;
+                        <span>{{service.service_name}}</span>
+                    </label>
+                </div>
+                {{/if}}
+                {{/each}}
+            </div>
+            <div class="flex-1 space-y-3">
+                {{each serviceList service idx}}
+                {{if idx > 4}}
+                <div>
+                    <label>
+                        <input {{greetingTask.subscribe.includes(service.id) ? 'checked' : ''}} type="checkbox" name="service" value="{{service.id}}"/>&nbsp;
+                        <span>{{service.service_name}}</span>
+                    </label>
+                </div>
+                {{/if}}
+                {{/each}}
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="button" class="submit-button" onclick="submitGreetingTask('greetingTask{{index}}')">提交</button>
+        </div>
+        <div class="mt-4 text-sm text-gray">
+            <span class="mx-2">问候时间：{{greetingTask.card_desc}}</span>
+            <span class="mx-2">问候次数：{{greetingTask.greetings_number}}</span>
+        </div>
+    </form>
+</div>
+{{/each}}

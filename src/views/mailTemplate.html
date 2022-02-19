@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greeting mail</title>
+</head>
+<body>
+    <div style="padding: 1rem">
+        {{each servicesData}}
+        {{if $value.name == '天气预报'}}
+        <div style="float:right;display: flex;flex-direction: column;align-items: flex-end;
+            --tw-space-y-reverse:0;margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));"
+             title="{{$value.content.now.wind_dir}} {{$value.content.now.wind_class}}">
+<!--            <div style="font-size: 2.25rem;line-height: 2.5rem;">{{$value.content.now.emoji}}</div>-->
+            <div>📅 今 <span style="font-size: 1.25rem;">{{$value.content.now.emoji}}</span> {{$value.content.now.text}} {{$value.content.now.temp}}℃</div>
+            <div>📅 明 <span style="font-size: 1.25rem;">{{$value.content.tomorrow.emoji}}</span> {{$value.content.tomorrow.text}} {{$value.content.tomorrow.temp}}℃</div>
+            <div>{{$value.content.location.city}}{{$value.content.location.name}}</div>
+        </div>
+        {{/if}}
+        {{/each}}
+
+        {{each servicesData}}
+        {{if $value.name == '自定义（未开通）' || $value.name == '自定义'}}
+        <div style="display: flex;flex-direction: column;align-items: flex-start;margin-bottom: 1.5rem;padding-left: 1rem">
+            <div style="width: 75%;margin-bottom: 1.5rem;">
+                <header style="text-align: center;border-bottom: 1px solid #ccc">
+                    <span style="background: white;padding: 1.2rem">{{$value.content.title}}</span>
+                </header>
+                <p style="color: #565a5c;font-family: fangsong;text-indent: 2rem;padding: 1rem 0;">{{$value.content.content}}</p>
+            </div>
+        </div>
+        {{/if}}
+        {{/each}}
+
+        {{each servicesData}}
+        {{if $value.name != '天气预报' && $value.name != '自定义（未开通）' && $value.name != '自定义'}}
+        <div style="display: flex;flex-direction: column;align-items: flex-start;margin-bottom: 1.5rem;padding-left: 1rem">
+            <div style="width: 75%;margin-bottom: 1.5rem;">
+                <header style="text-align: center;border-bottom: 1px solid #ccc">
+                    <span style="background: white;padding: 1.2rem">{{$value.name}}</span>
+                </header>
+                <p style="color: #565a5c;font-family: fangsong;text-indent: 2rem;padding: 1rem 0;">{{$value.content}}</p>
+            </div>
+        </div>
+        {{/if}}
+        {{/each}}
+    </div>
+    <div style="float: right;color: #565a5c;font-family: fangsong;">回复TD退订</div>
+</body>
+</html>

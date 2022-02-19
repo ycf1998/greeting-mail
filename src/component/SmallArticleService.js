@@ -1,0 +1,1 @@
+const URL = "https://data.zhai78.com/openArticleRand.php";
