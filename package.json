@@ -1,0 +1,35 @@
+{
+  "name": "greeting",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "postcss tailwind.css -o src/public/css/tailwind.css --watch",
+    "build": "set NODE_ENV=production && postcss tailwind.css -o src/public/css/tailwind.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.2.5",
+    "postcss-cli": "^8.3.1",
+    "tailwindcss": "^2.1.2"
+  },
+  "dependencies": {
+    "art-template": "^4.13.2",
+    "axios": "^0.21.1",
+    "https": "^1.0.0",
+    "koa": "^2.13.1",
+    "koa-art-template": "^1.1.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^10.0.0",
+    "koa-session": "^6.2.0",
+    "koa-static": "^5.0.0",
+    "koa-views": "^7.0.1",
+    "koa2-cors": "^2.0.6",
+    "mysql": "^2.18.1",
+    "node-schedule": "^2.0.0",
+    "nodemailer": "^6.6.1",
+    "uuid": "^8.3.2"
+  }
+}

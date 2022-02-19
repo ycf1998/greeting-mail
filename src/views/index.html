@@ -1,0 +1,279 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greeting mail</title>
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/tailwind.css">
+    <link rel="stylesheet" href="./css/iOS-toggleButton.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/titleAnimation.css">
+    <style>
+        #mask {
+            display: none;
+            position: fixed;
+            height: 110vh;
+            width: 100vw;
+            margin-top: -20px;
+            z-index: 1;
+            opacity: 0.5;
+            background: rgba(0, 0, 0, .5);
+        }
+    </style>
+</head>
+<body>
+<div id="mask"></div>
+<div class="fixed top-0 right-0 px-1 text-sm">
+    <span id="currentUser"></span>
+    <span class="text-blue-400" onclick="openAuthDiv()">切换账号</span>
+</div>
+<!-- 登录注册 -->
+<div id="authDiv" style="display: none"
+class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-16 z-30 ">
+<div class="card" style="padding: 1rem">
+   <form id="authForm" action="" method="post">
+       <div class="font-sans text-lg font-semibold text-gray-300">
+           <input type="radio" name="tag" class="hidden" id="toLoginTag" value="login" checked/><label
+               for="toLoginTag"
+               class="cursor-pointer">登录</label>
+           <span class="text-black">/</span>
+           <input type="radio" name="tag" class="hidden" id="toRegTag" value="register"/><label for="toRegTag"
+                                                                                                class="cursor-pointer">注册</label>
+            <span class="float-right cursor-pointer" onclick="closeAuthDiv()">✖</span>
+       </div>
+       <div class="form-item">
+           <input placeholder="邮箱" type="email" id="email" name="email" required autocomplete="off"/>
+       </div>
+       <!--                <div class="form-item reg-item">-->
+       <!--                    <input placeholder="验证码" type="text" id="verifyCode" name="verifyCode" autocomplete="off" />-->
+       <!--                    <div id="sendVerifyCode">✉<span>12s</span></div>-->
+       <!--                </div>-->
+       <div class="form-item reg-item link-item">
+           <select type="text" id="province" name="province" onchange="link(this)">
+               <option>请选择</option>
+           </select>
+           <select type="text" id="city" name="city" onchange="link(this)">
+               <option>请选择</option>
+           </select>
+           <select type="text" id="district" name="district">
+               <option>请选择</option>
+           </select>
+       </div>
+       <div class="form-item">
+           <input required placeholder="密码" type="password" id="password" name="password"/>
+       </div>
+       <div class="text-center">
+           <button type="button" class="success-button" onclick="submitAuth()">提交</button>
+       </div>
+   </form>
+</div>
+</div>
+<div class="container mx-auto my-4 font-mono">
+    <div>
+        <h2 id="title" class="sm:text-6xl text-5xl font-bold mb-8 text-center">Greeting Mail</h2>
+    </div>
+    <!-- 问候任务卡 -->
+    <div id="greetingCards" class="mt-6 mb-8 sm:flex sm:flex-wrap sm:justify-center"></div>
+</div>
+</body>
+<script src="./js/barrage.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    <!--  标题随机动画效果  -->
+    let $title = document.getElementById('title');
+    $title.innerHTML = $title.textContent.replace(/\S/g, '<span>$&</span>')
+
+    let animation = ['jump', 'pop', 'flip', 'blink'];
+    let targetAnimation = animation[Math.floor(Math.random() * 10 % 4)];
+    $title.style.setProperty('--animation', targetAnimation);
+
+    document.querySelectorAll('#title span').forEach((span, index) => {
+        span.style.setProperty("--delay", `${index * 0.1}s`)
+    })
+</script>
+<script>
+    <!--  开关问候动画  -->
+    document.getElementById('greetingCards').addEventListener('click', function (e) {
+        if (e.target.classList.contains('ios-toggle-checkbox')) {
+            let parent = e.target.parentElement;
+            while (!parent.classList.contains('card')) parent = parent.parentElement;
+            if (e.target.checked) {
+                parent.style.transform = 'rotateY(0deg)'
+                parent.querySelector('.submit-button').style.display = 'inline-block'
+            } else {
+                parent.style.transform = 'rotateY(180deg)'
+                parent.querySelector('.submit-button').style.display = 'none'
+            }
+        }
+    })
+</script>
+<script>
+    <!--  表单切换  -->
+    document.getElementById('toLoginTag').onclick = () => document.querySelectorAll('.reg-item')
+        .forEach(e => {
+            e.style.transform = 'translateX(calc(300%))';
+            setTimeout(() => e.style.display = 'none', 300);
+            e.childNodes.forEach(c => {
+                if (c.tagName === 'INPUT' || c.tagName === 'SELECT') {
+                    c.setAttribute('required', false);
+                }
+            })
+        })
+    document.getElementById('toRegTag').onclick = () => document.querySelectorAll('.reg-item')
+        .forEach(e => {
+            e.style.display = 'flex';
+            setTimeout(() => e.style.transform = 'none', 10);
+            e.childNodes.forEach(c => {
+                if (c.tagName === 'INPUT' || c.tagName === 'SELECT') {
+                    c.setAttribute('required', true);
+                }
+            })
+        })
+</script>
+
+<script>
+    let personId;
+    let personInfo;
+    let serviceList;
+
+    window.onload = async function () {
+        // 获取省份下拉框数据
+        await axios.get('./api/province').then(res => {
+            let option = '<option value="">请选择</option>';
+            for (let data of res.data) {
+                option += `<option value="${data.val}">${data.val}</option>`;
+            }
+            document.getElementById("province").innerHTML = option;
+        })
+        await getUserInfo();
+        if (personId === undefined) {
+            // 获得所有展示卡片
+            axios.get('./views/showAllCards').then(res => {
+                document.querySelector('#greetingCards').innerHTML = res.data;
+            })
+        }
+        // 获取所有服务
+        axios.get('./api/services').then(res => {
+            serviceList = res.data;
+        })
+
+    }
+
+    // 三级联动
+    function link(thisObj) {
+        let param = thisObj.id;
+        let value = thisObj.value;
+        let $target = thisObj.nextElementSibling;
+        let target = $target.id;
+        axios.get(`./api/${target}?${param}=${value}`).then(res => {
+            let option = '<option value="">请选择</option>';
+            for (let data of res.data) {
+                option += `<option value="${data.val}">${data.val}</option>`;
+            }
+            document.getElementById(target).innerHTML = option;
+        })
+    }
+
+    // 获取个人信息
+    function getUserInfo() {
+        return axios.get('./sso/getUserInfo').then(res => res.data)
+            .then(data => {
+                if (data.code === 200) {
+                    personInfo = data.data;
+                    personId = personInfo.id;
+                    document.getElementById("currentUser").textContent = personInfo.username;
+                    // 加载用户问候
+                    getPersonGreeting();
+                } else {
+                    openAuthDiv();
+                }
+            })
+    }
+
+    // 登录、注册提交
+    function submitAuth() {
+        let $form = document.getElementById('authForm');
+        if ($form.reportValidity()) {
+            let isLogin = document.querySelector("[name='tag']:checked").value === 'login';
+            let url = isLogin ? './sso/login' : './sso/register';
+            axios.post(url, getFormJsonData($form)).then(res => res.data)
+                .then(data => {
+                    if (data.code === 200) {
+                        getUserInfo()
+                        closeAuthDiv();
+                    } else {
+                        $barrage.send(data.message);
+                    }
+                })
+        }
+    }
+
+    // 修改个人信息
+    function updateProfile() {
+
+    }
+
+    // 获取用户问候任务
+    function getPersonGreeting() {
+        axios.get(`./views/personGreeting/${personId}`).then(res => {
+            document.querySelector('#greetingCards').innerHTML = res.data;
+        });
+    }
+
+    // 开关问候
+    function toggleGreeting(thisObj) {
+        let open = thisObj.checked;
+        axios.post(`/api/toggleGreeting?id=${thisObj.dataset.id}`, {open}).then(res => res.data)
+            .then(data => {
+                if (data.code !== 200) {
+                    $barrage.send(data.message);
+                }
+            })
+    }
+
+    // 提交问候任务
+    function submitGreetingTask(formId) {
+        let $form = document.getElementById(formId);
+        axios.post('./api/personGreeting', getFormJsonData($form)).then(res => res.data)
+            .then(data => {
+                $barrage.send(data.message);
+            })
+    }
+
+    /**
+     * 打开登录注册窗口
+     */
+    function openAuthDiv() {
+        document.getElementById('mask').style.display = 'block';
+        document.getElementById('authDiv').style.display = '';
+    }
+
+    /**
+     * 关登录注册窗口
+     */
+    function closeAuthDiv() {
+        document.getElementById('mask').style.display = 'none';
+        document.getElementById('authDiv').style.display = 'none';
+    }
+
+    /**
+     *
+     * @param formNode
+     * @returns {{}}
+     */
+    function getFormJsonData(formNode) {
+        let formData = new FormData(formNode);
+        let jsonData = {};
+        for (let [k, v] of formData.entries()) {
+            if (jsonData.hasOwnProperty(k)) {
+                jsonData[k] = [...jsonData[k], ...v];
+            } else {
+                jsonData[k] = v;
+            }
+        }
+        return jsonData;
+    }
+</script>
+</html>

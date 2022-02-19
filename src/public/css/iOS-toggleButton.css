@@ -1,0 +1,66 @@
+:root {
+    --button-width: 50px; /*按钮宽*/
+    --button-height: 25px; /*按钮高*/
+    --toggle-diameter: 20px; /*圆形直径*/
+    --button-toggle-offset: calc((var(--button-height) - var(--toggle-diameter))/2); /*按钮与里面圆形的距离*/
+    --toggle-shadow-offset: 2px; /*圆形阴影*/
+    --toggle-wider: 30px; /*按钮长按拉长的宽度*/
+    --color-grey: #E9E9EA;
+    --color-dark-grey: #9E9E9E;
+    --color-green: #30D158;
+}
+
+.ios-toggle-button {
+    display: inline-block;
+    width: var(--button-width);
+    height: var(--button-height);
+    background-color: var(--color-grey);
+    border-radius: calc(var(--button-height) / 2);
+    position: relative;
+    transition: .3s all ease-in-out;
+}
+
+.ios-toggle-button::after {
+    content: '';
+    display: inline-block;
+    width: var(--toggle-diameter);
+    height: var(--toggle-diameter);
+    background-color: #fff;
+    border-radius: calc(var(--toggle-diameter) / 2);
+    position: absolute;
+    top: var(--button-toggle-offset);
+    transform: translateX(var(--button-toggle-offset));
+    box-shadow: var(--toggle-shadow-offset) 0 calc(var(--toggle-shadow-offset) * 4) rgba(0, 0, 0, .10);
+    transition: .3s all ease-in-out
+}
+
+.ios-toggle-label>input {
+    display: none;
+}
+
+.ios-toggle-label>input:checked + .ios-toggle-button {
+    background-color: var(--color-green);
+}
+
+.ios-toggle-label>input:checked + .ios-toggle-button::after {
+    transform: translateX(calc(var(--button-width) - var(--toggle-diameter) - var(--button-toggle-offset)));
+    box-shadow: calc(var(--toggle-shadow-offset) * -1) 0 calc(var(--toggle-shadow-offset) * 4) rgba(0, 0, 0, .10);
+}
+
+.ios-toggle-label>input:active + .ios-toggle-button::after {
+    width: var(--toggle-wider);
+}
+
+.ios-toggle-label>input:checked:active + .ios-toggle-button::after {
+    transform: translateX(calc(var(--button-width) - var(--toggle-wider) - var(--toggle-shadow-offset)));
+}
+
+@media(prefers-color-scheme: dark) {
+    body {
+        background-color: #1C1C1E;
+    }
+
+    .ios-toggle-button {
+        background-color: var(--color-dark-grey);
+    }
+}

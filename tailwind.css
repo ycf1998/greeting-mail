@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/*太阳卡、月亮卡*/
+.chose-topic>input {
+    display: none;
+}
+
+.chose-topic>span {
+    @apply text-xs font-semibold text-gray-400 cursor-pointer;
+}
+
+.card {
+    @apply relative m-4 p-3 sm:w-full md:w-1/2 lg:w-1/4 border rounded-lg shadow-lg box-border;
+    transition: transform 0.65s ease-in-out;
+    background-color: #faf3f3;
+}
+/**太阳卡*/
+.sun-card {
+    background-color: #FFEEA2;
+}
+.sun-card::after {
+    content: '';
+    background-color: orange;
+    display: block;
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    border-radius: 50%;
+}
+.sun-card .submit-button {
+    @apply py-2 px-6 rounded-lg shadow-md text-white font-sans bg-yellow-500 ring-4 ring-yellow-500 ring-opacity-50 focus:outline-none
+}
+.sun-card .chose-topic>input:checked + span {
+    @apply text-yellow-400;
+}
+.sun-card .text-gray {
+    @apply text-gray-500
+}
+
+/*月亮卡*/
+.moon-card {
+    background-color: #2C3E50;
+    color: aliceblue;
+}
+.moon-card::after {
+    content: '';
+    display: block;
+    width: 90px;
+    height: 90px;
+    position: absolute;
+    top: -45px;
+    right: 10px;
+    border-radius: 50%;
+    box-shadow: 25px 20px 0 cyan;
+}
+.moon-card .ios-toggle-button {
+    background-color: var(--color-dark-grey);
+}
+.moon-card .submit-button {
+    @apply py-2 px-6 rounded-lg shadow-md text-white font-sans bg-blue-400 ring-4 ring-blue-500 ring-opacity-50 focus:outline-none
+}
+.moon-card .chose-topic>input:checked + span {
+    @apply text-blue-400;
+}
+.moon-card .text-gray {
+    @apply text-gray-300
+}
+
+/*按钮*/
+.success-button {
+    @apply py-2 px-6 rounded-lg shadow-md text-white font-sans bg-green-500 ring-4 ring-green-500 ring-opacity-50 focus:outline-none
+}

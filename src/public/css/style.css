@@ -1,0 +1,53 @@
+#greetingCards form label {
+    cursor: pointer;
+}
+
+[name="tag"]:checked + label {
+    color: black;
+}
+
+.form-item {
+    margin: 1rem 0;
+    position: relative;
+}
+
+.form-item input, .form-item select {
+    border-radius: 4px;
+    margin: 0;
+    padding: .6rem 1rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .25);
+    width: 100%;
+    box-sizing: border-box;
+    color: #2e3131;
+    outline: none;
+}
+
+.reg-item {
+    display: none;
+    transform: translateX(calc(300%));
+    transition: .6s transform ease-in-out;
+}
+
+.link-item {
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.link-item>select {
+    position: relative;
+    width: 30%;
+    transition: .6s transform ease-in-out;
+}
+
+#sendVerifyCode {
+    position: absolute;
+    cursor: pointer;
+    font-size: 1rem;
+    top: .6rem;
+    right: .3rem;
+}
+
+#sendVerifyCode span {
+    font-size: 1rem;
+    line-height: 1.2rem;
+}
