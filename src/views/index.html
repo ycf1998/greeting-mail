@@ -225,7 +225,7 @@ class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-1
     // 开关问候
     function toggleGreeting(thisObj) {
         let open = thisObj.checked;
-        axios.post(`/api/toggleGreeting?id=${thisObj.dataset.id}`, {open}).then(res => res.data)
+        axios.post(`./api/toggleGreeting?id=${thisObj.dataset.id}`, {open}).then(res => res.data)
             .then(data => {
                 if (data.code !== 200) {
                     $barrage.send(data.message);
