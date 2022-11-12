@@ -6,7 +6,6 @@ const personGreeting = require("../db/personGreeting");
 const personDao = require("../db/person");
 const greetingLog = require("../db/greetingLog");
 
-
 const scheduleService = require('../service/scheduleService')
 const mailService = require('../service/mailService')
 
@@ -29,58 +28,51 @@ async function sendGreetingMail(greetingsTask) {
         "service_class": "WeatherService"
     })
     // 2. 调用各个服务装填内容
-    let args = { greeting_name, person_id, greeting_id};
+    let args = { person_id, greeting_id, greeting_name };
     for(let k in person) args[k] = person[k];
     let subject = greeting_name;
     let servicesData = [];
     for(let s of services) {
         args['service_name'] = s.service_name;
         let content = await api[s.service_class].doService(args);
-        // 邮件标题为标题版天气预报
-        if (s.service_class == 'WeatherService')
-            subject = api[s.service_class].topic(content);
+        // 天气预报作为邮件标题
+        if (s.service_class == 'WeatherService') {
+            subject = await api[s.service_class].topic(content, args) || subject;
+            if (!subject.includes('星期')) {
+                console.info('天气预报有问题啦')
+            }
+        } 
         servicesData.push({
             name: s.service_name,
             content
-        });
+        }); 
     }
     // 3. 根据模板渲染邮件html
     // let htmlLog = JSON.stringify(servicesData, null, 2);
     let html = template(path.join(__dirname, '../views/mailTemplate.html'), {
         servicesData
     });
-    // 4. 发生邮件
+    // 4. 发送邮件
     mailService.sendMail({
         from: '"🌈 greeting mail" <374648769@qq.com>', // sender address
         to: email, // list of receivers
         subject: subject, // Subject line
         html: html, // html body
     }, (err, msg) => {
-        let result = true;
-        if(err) {
-            result = false;
-        }
+        let result = err? false :true;
         // 保存邮件发送日志
-        // 解决表情字符集问题
-        let weather = servicesData.filter(e => e.name === '天气预报');
-        if (weather.length > 0) {
-            weather = weather[0];
-            delete weather.content.now.emoji;
-            delete weather.content.forecasts;
-            delete weather.content.tomorrow.emoji;
-        }
-        let htmlLog = JSON.stringify(servicesData, null, 2);
         greetingLog.add({
             greeting_id: greetingsTask.greeting_id,
             greeting_name: greetingsTask.greeting_name,
             greeting_cron: greetingsTask.greeting_cron,
             email: email,
-            content: htmlLog,
-            result: result,
-            return_msg: result ? `成功发送给${msg.accepted}` : "发生失败"
+            result: result ? `成功发送给${msg.accepted}` : "发送失败"
         })
-        personDao.addGreetingsNumber(greetingsTask.person_id);
-        personGreeting.addGreetingsNumber(greetingsTask.greeting_id);
+        // 更新问候次数
+        if(result) {
+            personDao.addGreetingsNumber(greetingsTask.person_id);
+            personGreeting.addGreetingsNumber(greetingsTask.greeting_id);
+        }
     })
 }
 

@@ -1,3 +1,4 @@
+// 每日一语
 const axios = require('axios');
 const https = require('https');
 
@@ -16,7 +17,7 @@ EveryDaySentenceService.prototype = {
         return await axios.get(URL, {
             httpsAgent: agent
         }).then(res => res.data)
-            .catch((err) => "对不起，服务请求失败!");
+            .catch((err) => "服务异常");
     }
 }
 

@@ -7,7 +7,8 @@ const witheList = ['/',
     '/api/province',
     '/api/city',
     '/api/district',
-    '/views/showAllCards']
+    '/views/showAllCards',
+    '/api/log']
 
 async function auth(ctx, next) {
     if (!witheList.includes(ctx.path)) {
