@@ -1,3 +1,4 @@
+// 舔狗日记
 const axios = require('axios');
 const https = require('https');
 
@@ -8,7 +9,7 @@ const agent = new https.Agent({
 
 const URL = "https://api.oick.cn/dog/api.php";
 
-function DogDiaryService() {}
+function DogDiaryService() { }
 
 DogDiaryService.prototype = {
     constructor: DogDiaryService,
@@ -16,7 +17,7 @@ DogDiaryService.prototype = {
         return await axios.get(URL, {
             httpsAgent: agent
         }).then(res => res.data)
-            .catch((err) => "对不起，服务请求失败!");
+            .catch((err) => "服务异常");
     }
 }
 
