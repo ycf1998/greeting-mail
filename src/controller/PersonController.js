@@ -5,7 +5,8 @@ const greetingCardDb = require("../db/greetingCard");
 const serviceDb = require("../db/service");
 const greetingServiceDb = require("../db/greetingService");
 
-async function register(ctx) {
+// 注册
+async function register (ctx) {
     let record = ctx.request.body;
     let person = await personDb.queryByEmail(record.email) || [];
     if (person.length > 0) {
@@ -45,7 +46,8 @@ async function register(ctx) {
     }
 }
 
-async function login(ctx) {
+// 登录
+async function login (ctx) {
     await personDb.login(ctx.request.body).then(result => {
         if (result.length > 0) {
             let person = result[0];
@@ -71,7 +73,8 @@ async function login(ctx) {
     });
 }
 
-async function getUserInfo(ctx) {
+// 获取用户信息
+async function getUserInfo (ctx) {
     await personDb.queryById(ctx.session.USERID).then(result => {
         if (result.length > 0) {
             let personDb = result[0];
@@ -89,12 +92,8 @@ async function getUserInfo(ctx) {
     });
 }
 
-async function getPersonGreeting(ctx) {
-    await personGreetingDb.queryByPerson(ctx.params.id).then(result => ctx.body = result);
-}
-
-async function toggleGreeting(ctx) {
-
+// 开关问候开片
+async function toggleGreeting (ctx) {
     let personGreeting = {
         open: ctx.request.body.open,
         person_id: ctx.session.USERID,
@@ -114,7 +113,8 @@ async function toggleGreeting(ctx) {
     }
 }
 
-async function updatePersonGreeting(ctx) {
+// 更新问候
+async function updatePersonGreeting (ctx) {
     let post = ctx.request.body;
     await greetingServiceDb.delByGreetingId(post.id, ctx.session.USERID);
     if (post.service !== undefined && post.service.length > 0) {
@@ -134,8 +134,8 @@ async function updatePersonGreeting(ctx) {
     }
 }
 
-// 返回视图
-async function loadPersonGreeting(ctx) {
+// 加载用户问候卡【视图】
+async function loadPersonGreeting (ctx) {
     let serviceList = await serviceDb.queryList();
     let personGreeting = await personGreetingDb.queryByPerson(ctx.params.id);
     let greetingTasks = [];
@@ -154,7 +154,7 @@ async function loadPersonGreeting(ctx) {
                 card_desc: data.card_desc,
                 greetings_number: data.greetings_number,
                 open: data.open,
-                services: [{service_id: data.service_id, topic: data.topic}],
+                services: [{ service_id: data.service_id, topic: data.topic }],
             }
             taskCount.push(data.id);
             greetingTasks.push(gt);
@@ -171,7 +171,6 @@ module.exports = {
     getUserInfo,
     login,
     register,
-    getPersonGreeting,
     toggleGreeting,
     updatePersonGreeting,
     loadPersonGreeting

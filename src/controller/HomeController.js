@@ -1,7 +1,8 @@
 const serviceDb = require("../db/service");
 const greetingCardDb = require("../db/greetingCard");
 
-async function showAllCards(ctx) {
+// 展示所有卡片【【view】】
+async function showAllCards (ctx) {
     let serviceList = await serviceDb.queryList();
     let greetingCards = await greetingCardDb.queryList();
     let greetingTasks = [];

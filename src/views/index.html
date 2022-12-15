@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,65 +24,67 @@
         }
     </style>
 </head>
+
 <body>
-<div id="mask"></div>
-<div class="fixed top-0 right-0 px-1 text-sm">
-    <span id="currentUser"></span>
-    <span class="text-blue-400" onclick="openAuthDiv()">切换账号</span>
-</div>
-<!-- 登录注册 -->
-<div id="authDiv" style="display: none"
-class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-16 z-30 ">
-<div class="card" style="padding: 1rem">
-   <form id="authForm" action="" method="post">
-       <div class="font-sans text-lg font-semibold text-gray-300">
-           <input type="radio" name="tag" class="hidden" id="toLoginTag" value="login" checked/><label
-               for="toLoginTag"
-               class="cursor-pointer">登录</label>
-           <span class="text-black">/</span>
-           <input type="radio" name="tag" class="hidden" id="toRegTag" value="register"/><label for="toRegTag"
-                                                                                                class="cursor-pointer">注册</label>
-            <span class="float-right cursor-pointer" onclick="closeAuthDiv()">✖</span>
-       </div>
-       <div class="form-item">
-           <input placeholder="邮箱" type="email" id="email" name="email" required autocomplete="off"/>
-       </div>
-       <!--                <div class="form-item reg-item">-->
-       <!--                    <input placeholder="验证码" type="text" id="verifyCode" name="verifyCode" autocomplete="off" />-->
-       <!--                    <div id="sendVerifyCode">✉<span>12s</span></div>-->
-       <!--                </div>-->
-       <div class="form-item reg-item link-item">
-           <select type="text" id="province" name="province" onchange="link(this)">
-               <option>请选择</option>
-           </select>
-           <select type="text" id="city" name="city" onchange="link(this)">
-               <option>请选择</option>
-           </select>
-           <select type="text" id="district" name="district">
-               <option>请选择</option>
-           </select>
-       </div>
-       <div class="form-item">
-           <input required placeholder="密码" type="password" id="password" name="password"/>
-       </div>
-       <div class="text-center">
-           <button type="button" class="success-button" onclick="submitAuth()">提交</button>
-       </div>
-   </form>
-</div>
-</div>
-<div class="container mx-auto my-4 font-mono">
-    <div>
-        <h2 id="title" class="sm:text-6xl text-5xl font-bold mb-8 text-center">Greeting Mail</h2>
+    <div id="mask"></div>
+    <div class="fixed top-0 right-0 px-1 text-sm ">
+        <span id="currentUser"></span>
+        <span class="text-blue-400 cursor-pointer" onclick="openAuthDiv()">切换账号</span>
     </div>
-    <!-- 问候任务卡 -->
-    <div id="greetingCards" class="mt-6 mb-8 sm:flex sm:flex-wrap sm:justify-center"></div>
-</div>
+    <!-- 登录注册 -->
+    <div id="authDiv" style="display: none"
+        class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-16 z-30 ">
+        <div class="card" style="padding: 1rem">
+            <form id="authForm" action="" method="post">
+                <div class="font-sans text-lg font-semibold text-gray-300">
+                    <input type="radio" name="tag" class="hidden" id="toLoginTag" value="login" checked /><label
+                        for="toLoginTag" class="cursor-pointer">登录</label>
+                    <span class="text-black">/</span>
+                    <input type="radio" name="tag" class="hidden" id="toRegTag" value="register" /><label for="toRegTag"
+                        class="cursor-pointer">注册</label>
+                    <span class="float-right cursor-pointer text-2xl text-black" onclick="closeAuthDiv()">X</span>
+                </div>
+                <div class="form-item">
+                    <input placeholder="邮箱" type="email" id="email" name="email" required autocomplete="off" />
+                </div>
+                <!--                <div class="form-item reg-item">-->
+                <!--                    <input placeholder="验证码" type="text" id="verifyCode" name="verifyCode" autocomplete="off" />-->
+                <!--                    <div id="sendVerifyCode">✉<span>12s</span></div>-->
+                <!--                </div>-->
+                <div class="form-item reg-item link-item">
+                    <select type="text" id="province" name="province" onchange="link(this)">
+                        <option>请选择</option>
+                    </select>
+                    <select type="text" id="city" name="city" onchange="link(this)">
+                        <option>请选择</option>
+                    </select>
+                    <select type="text" id="district" name="district">
+                        <option>请选择</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <input required placeholder="密码" type="password" id="password" name="password" />
+                </div>
+                <div class="text-center">
+                    <button type="button" class="success-button" onclick="submitAuth()">提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container mx-auto my-4 font-mono">
+        <div>
+            <h2 id="title" class="sm:text-6xl text-5xl font-bold mb-8 text-center">Greeting Mail</h2>
+        </div>
+        <!-- 问候任务卡 -->
+        <div id="greetingCards" class="mt-6 mb-8 sm:flex sm:flex-wrap sm:justify-center"></div>
+    </div>
 </body>
+
 <script src="./js/barrage.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!--  标题随机动画效果  -->
 <script>
-    <!--  标题随机动画效果  -->
     let $title = document.getElementById('title');
     $title.innerHTML = $title.textContent.replace(/\S/g, '<span>$&</span>')
 
@@ -93,8 +96,8 @@ class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-1
         span.style.setProperty("--delay", `${index * 0.1}s`)
     })
 </script>
+<!--  开关问候动画  -->
 <script>
-    <!--  开关问候动画  -->
     document.getElementById('greetingCards').addEventListener('click', function (e) {
         if (e.target.classList.contains('ios-toggle-checkbox')) {
             let parent = e.target.parentElement;
@@ -109,8 +112,8 @@ class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-1
         }
     })
 </script>
+<!--  表单切换  -->
 <script>
-    <!--  表单切换  -->
     document.getElementById('toLoginTag').onclick = () => document.querySelectorAll('.reg-item')
         .forEach(e => {
             e.style.transform = 'translateX(calc(300%))';
@@ -132,7 +135,7 @@ class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-1
             })
         })
 </script>
-
+<!-- 问候邮件 -->
 <script>
     let personId;
     let personInfo;
@@ -162,7 +165,7 @@ class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-1
     }
 
     // 三级联动
-    function link(thisObj) {
+    function link (thisObj) {
         let param = thisObj.id;
         let value = thisObj.value;
         let $target = thisObj.nextElementSibling;
@@ -177,7 +180,7 @@ class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-1
     }
 
     // 获取个人信息
-    function getUserInfo() {
+    function getUserInfo () {
         return axios.get('./sso/getUserInfo').then(res => res.data)
             .then(data => {
                 if (data.code === 200) {
@@ -193,7 +196,7 @@ class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-1
     }
 
     // 登录、注册提交
-    function submitAuth() {
+    function submitAuth () {
         let $form = document.getElementById('authForm');
         if ($form.reportValidity()) {
             let isLogin = document.querySelector("[name='tag']:checked").value === 'login';
@@ -211,21 +214,21 @@ class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-1
     }
 
     // 修改个人信息
-    function updateProfile() {
+    function updateProfile () {
 
     }
 
     // 获取用户问候任务
-    function getPersonGreeting() {
+    function getPersonGreeting () {
         axios.get(`./views/personGreeting/${personId}`).then(res => {
             document.querySelector('#greetingCards').innerHTML = res.data;
         });
     }
 
     // 开关问候
-    function toggleGreeting(thisObj) {
+    function toggleGreeting (thisObj) {
         let open = thisObj.checked;
-        axios.post(`./api/toggleGreeting?id=${thisObj.dataset.id}`, {open}).then(res => res.data)
+        axios.post(`./api/toggleGreeting?id=${thisObj.dataset.id}`, { open }).then(res => res.data)
             .then(data => {
                 if (data.code !== 200) {
                     $barrage.send(data.message);
@@ -234,7 +237,7 @@ class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-1
     }
 
     // 提交问候任务
-    function submitGreetingTask(formId) {
+    function submitGreetingTask (formId) {
         let $form = document.getElementById(formId);
         axios.post('./api/personGreeting', getFormJsonData($form)).then(res => res.data)
             .then(data => {
@@ -245,7 +248,7 @@ class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-1
     /**
      * 打开登录注册窗口
      */
-    function openAuthDiv() {
+    function openAuthDiv () {
         document.getElementById('mask').style.display = 'block';
         document.getElementById('authDiv').style.display = '';
     }
@@ -253,7 +256,7 @@ class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-1
     /**
      * 关登录注册窗口
      */
-    function closeAuthDiv() {
+    function closeAuthDiv () {
         document.getElementById('mask').style.display = 'none';
         document.getElementById('authDiv').style.display = 'none';
     }
@@ -263,7 +266,7 @@ class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-1
      * @param formNode
      * @returns {{}}
      */
-    function getFormJsonData(formNode) {
+    function getFormJsonData (formNode) {
         let formData = new FormData(formNode);
         let jsonData = {};
         for (let [k, v] of formData.entries()) {
@@ -276,4 +279,5 @@ class="sm:flex sm:justify-center sm:items-center fixed w-full sm:inset-y-0 top-1
         return jsonData;
     }
 </script>
+
 </html>

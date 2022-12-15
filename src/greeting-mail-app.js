@@ -64,8 +64,9 @@ router.use('/views', views.routes());
 
 greetingApp.use(router.routes()).use(router.allowedMethods());
 
-greetingApp.listen(3002)
+greetingApp.listen(3002, () => console.log("success on 3002"))
 
 
-const {reloadServiceSchedule} = require('./component/index');
+const { reloadServiceSchedule } = require('./component/index');
+// 启动放开该注释
 // reloadServiceSchedule();
