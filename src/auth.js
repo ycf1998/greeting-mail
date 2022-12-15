@@ -1,5 +1,6 @@
 // 放行白名单
 const witheList = ['/',
+    '/views/showAllCards',
     '/sso/login',
     '/sso/register',
     '/favicon.ico',
@@ -7,10 +8,9 @@ const witheList = ['/',
     '/api/province',
     '/api/city',
     '/api/district',
-    '/views/showAllCards',
     '/api/log']
 
-async function auth(ctx, next) {
+async function auth (ctx, next) {
     if (!witheList.includes(ctx.path)) {
         if (ctx.session.USERID === undefined) {
             ctx.body = {

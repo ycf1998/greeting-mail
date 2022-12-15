@@ -1,5 +1,5 @@
 const axios = require('axios');
-const {baiduWeatherAk} = require("../config");
+const { baiduWeatherAk } = require("../config");
 
 const emojiMap = {
     "晴": '☀',
@@ -24,7 +24,7 @@ const emojiMap = {
 };
 const URL = `http://api.map.baidu.com/weather/v1/?data_type=all&ak=${baiduWeatherAk}&district_id=`;
 
-function getEmoji(text) {
+function getEmoji (text) {
     let emoji = emojiMap[text];
     if (emoji === undefined) {
         if (text.includes("雨")) emoji = '🌧';
@@ -35,11 +35,12 @@ function getEmoji(text) {
     return emoji;
 }
 
-function WeatherService() {}
+function WeatherService () { }
 
 WeatherService.prototype = {
     constructor: WeatherService,
     doService: async function (args) {
+        sleep(800)
         let districtId = args?.district_id;
         if (districtId !== undefined) {
             return await axios.get(encodeURI(URL + districtId)).then(res => res.data)
@@ -49,11 +50,11 @@ WeatherService.prototype = {
                         let tomorrow = data.result.forecasts[1] ?? {};
                         tomorrow.emoji = getEmoji(tomorrow.text_day);
                         tomorrow.text = tomorrow.text_day;
-                        tomorrow.temp = Math.floor((parseInt(tomorrow.high) + parseInt(tomorrow.low))/2);
+                        tomorrow.temp = Math.floor((parseInt(tomorrow.high) + parseInt(tomorrow.low)) / 2);
                         data.result.tomorrow = tomorrow;
                         return data.result;
                     } else {
-                       return '对不起，服务请求失败';
+                        return '对不起，服务请求失败';
                     }
                 })
                 .catch(() => "对不起，服务请求失败!");
@@ -67,6 +68,16 @@ WeatherService.prototype = {
         if (location !== undefined && now !== undefined) {
             return `🗺${location.name} ${getEmoji(now.text)}${now.text} ${now.temp}℃ ${forecasts[0].week}`;
         }
+    }
+}
+
+function sleep (NumMillis) {
+    var nowTime = new Date();
+    var exitTime = nowTime.getTime() + NumMillis;
+    while (true) {
+        now = new Date();
+        if (now.getTime() > exitTime)
+            return;
     }
 }
 
